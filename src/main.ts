@@ -1,8 +1,6 @@
-import {Plugin, TFile, TFolder, Vault, normalizePath} from "obsidian";
-import {MapGpx} from "./src/map/map";
-import {MapSettings} from "./src/map/settings";
-
-const yaml = require('js-yaml');
+import {Plugin, TFile, TFolder, Vault, normalizePath, parseYaml} from "obsidian";
+import {MapGpx} from "./map/map";
+import {MapSettings} from "./map/settings";
 
 // @ts-ignore
 import L from 'leaflet'
@@ -59,7 +57,7 @@ export default class MapGpxPlugin extends Plugin {
 
 	private setSettings(source: string): MapSettings
 	{
-		const settings = yaml.load(source);
+		const settings = parseYaml(source);
 		let local = new MapSettings();
 		return {
 			...local,

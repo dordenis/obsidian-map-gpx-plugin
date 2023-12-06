@@ -15,8 +15,9 @@ const context = await esbuild.context({
 	banner: {
 		js: banner,
 	},
-	entryPoints: ["main.ts"],
+	entryPoints: ["src/main.ts", "src/styles.css"],
 	bundle: true,
+	minify: true,
 	external: [
 		"obsidian",
 		"electron",
@@ -37,7 +38,18 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outfile: "main.js",
+	outdir: "./",
+	loader: {
+		".png": "dataurl",
+		".jpg": "file",
+		'.js': 'jsx',
+		".svg": "base64",
+		".ttf": "file",
+		".node": "file",
+		".woff": "file",
+		".woff2": "file",
+		".data": "base64",
+	}
 });
 
 if (prod) {

@@ -5,8 +5,18 @@ Allows you to draw both a single track and a list of tracks from a given folder.
 In his work he uses the library: [leaflet](https://github.com/Leaflet/Leaflet) and [leaflet-gpx](https://github.com/mpetazzoni/leaflet-gpx).
 
 This is a very simple plugin that allowed me to organize my collection gpx tracks.
-If you need more powerful functionality, please take a look at the plugin [obsidian-leaflet](https://github.com/javalent/obsidian-leaflet)
 
+### Difference from other plugins
+- Map plugin cannot draw gps track
+- Leaflet can do it, but POIs (points of interest) are created from the config, for me they are built from the GPS track
+- The most important difference is the ability to draw tracks as a table from the tracks folder. See command [maplist](#Multiple-tracks)
+
+## Install
+This plugin is not currently on the official list of plugins.
+Therefore, you can install it through a third-party plugin Brat
+
+ - Install the plugin Brat ![](docs/install_brat.png)
+ - In the plugin settings add a link to this repository - https://github.com/dordenis/obsidian-map-gpx-plugin ![](docs/install_map_gpx.png)
 ## Uses
 
 ### Single track
@@ -117,4 +127,5 @@ pointMatchers: [
 | pointMatchers | | Custom markers |
 | iconSize | [33, 45] | Marker size |
 
-
+## Info
+The plugin uses the service tile.openstreetmap.org to display maps.
