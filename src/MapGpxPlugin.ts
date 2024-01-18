@@ -61,11 +61,12 @@ export default class MapGpxPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
 	}
 
 	async loadMdSettings(source: string) {
-		this.settings = Object.assign({}, this.settings, await parseYaml(source));
+		this.settings = Object.assign({}, this.settings,  await parseYaml(source))
+		this.settings.cacheFolder = this.getCacheFolder()
 	}
 
 	async saveSettings() {
@@ -75,6 +76,21 @@ export default class MapGpxPlugin extends Plugin {
 	onunload() {
 		super.onunload();
 		console.log("Unload GPX plugin")
+	}
+
+	getCacheFolder(): string {
+		if (this.settings.cacheFolder != "")  {
+			return this.settings.cacheFolder
+		}
+
+		let basePath
+		if (this.app.vault.adapter instanceof FileSystemAdapter) {
+			basePath = this.app.vault.adapter.getBasePath()
+		} else {
+			throw new Error('Cannot determine base path.')
+		}
+		const relativePath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/cache/`
+		return `${basePath}/${relativePath}`
 	}
 
 }

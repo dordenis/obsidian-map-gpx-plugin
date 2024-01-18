@@ -28,6 +28,8 @@ export class MapGpx {
 
 	private createMap()
 	{
+		console.log(this.setting)
+
 		const map = L.map(this.createBox(), {
 			zoomControl: this.setting.zoomControl,
 			attributionControl: false

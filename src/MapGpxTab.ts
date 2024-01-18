@@ -35,7 +35,7 @@ export class MapGpxTab extends PluginSettingTab {
 				.setName("Folder cache")
 				.setDesc("Attention! Use an absolute path")
 				.addTextArea(text => text
-					.setValue(this.getCacheFolder())
+					.setValue(this.plugin.settings.cacheFolder)
 					.onChange(async (value) => {
 						this.plugin.settings.cacheFolder = value;
 						await this.plugin.saveSettings();
@@ -149,20 +149,5 @@ export class MapGpxTab extends PluginSettingTab {
 					})
 				);
 		}
-	}
-
-	getCacheFolder(): string {
-		if (this.plugin.settings.cacheFolder != "")  {
-			return this.plugin.settings.cacheFolder
-		}
-
-		let basePath
-		if (this.app.vault.adapter instanceof FileSystemAdapter) {
-			basePath = this.app.vault.adapter.getBasePath()
-		} else {
-			throw new Error('Cannot determine base path.')
-		}
-		const relativePath = `${this.app.vault.configDir}/plugins/${this.plugin.manifest.id}/cache/`
-		return `${basePath}/${relativePath}`
 	}
 }
