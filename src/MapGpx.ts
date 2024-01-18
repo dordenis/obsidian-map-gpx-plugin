@@ -3,8 +3,9 @@ import {MapGpxTrackProperty} from "./MapGpxTrackProperty";
 import {StorageTileLayer} from "./MapGpxStorageLayer";
 
 // @ts-ignore
-import L from 'leaflet'
+import L, {Control} from 'leaflet'
 require('./gpx');
+//require("leaflet-providers")
 
 export class MapGpx {
 
@@ -28,17 +29,32 @@ export class MapGpx {
 
 	private createMap()
 	{
-		console.log(this.setting)
-
 		const map = L.map(this.createBox(), {
 			zoomControl: this.setting.zoomControl,
 			attributionControl: false
 		});
 
+		let baseMaps: Record<string, Control.LayersObject> = {};
+
 		if (this.setting.cache) {
-			new StorageTileLayer(this.setting.service, {setting: this.setting}).addTo(map);
+			this.setting.providers.filter(p => p.enable).forEach(p => {
+				baseMaps[p.name] = new StorageTileLayer(p.url,
+					{cacheFolder: this.setting.cacheFolder, name: p.name}
+				)
+			})
 		} else {
-			L.tileLayer(this.setting.service).addTo(map)
+			this.setting.providers.filter(p => p.enable).forEach(p => {
+				baseMaps[p.name] = L.tileLayer(p.url, this.setting)
+			})
+		}
+
+		const providers: Array<Control.LayersObject> = Object.values(baseMaps);
+		if (providers[0]) {
+			const provider: Control.LayersObject = providers[0]
+			// @ts-ignore
+			provider.addTo(map) //default layer
+
+			L.control.layers(baseMaps).addTo(map)
 		}
 
 		return map;
@@ -81,4 +97,5 @@ export class MapGpx {
 			el?.setText( prop.distance().toString() );
 		}).addTo(map);
 	}
+
 }

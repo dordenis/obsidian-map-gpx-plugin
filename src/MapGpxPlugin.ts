@@ -1,7 +1,18 @@
-import {FileSystemAdapter, normalizePath, parseYaml, Plugin, TFile, TFolder, Vault} from "obsidian";
+import {
+	Events,
+	FileSystemAdapter,
+	MarkdownView,
+	normalizePath,
+	parseYaml,
+	Plugin,
+	TFile,
+	TFolder,
+	Vault
+} from "obsidian";
 import {DEFAULT_SETTINGS, MapGpxSettings} from "./MapGpxSettings";
 import {MapGpxTab} from "./MapGpxTab";
 import {MapGpx} from "./MapGpx";
+
 
 export default class MapGpxPlugin extends Plugin {
 

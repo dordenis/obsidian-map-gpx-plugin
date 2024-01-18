@@ -27,6 +27,7 @@
 		"leaflet": "^1.9.4",
 		"leaflet-defaulticon-compatibility": "^0.1.2",
 		"leaflet-gpx": "^1.7.0",
+		"leaflet-providers": "^2.0.0",
 		"request": "^2.88.2"
 	}
 }

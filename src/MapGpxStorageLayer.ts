@@ -20,7 +20,7 @@ export const StorageTileLayer = L.TileLayer.extend({
 			z: this._getZoomForUrl()
 		};
 
-		const path = `${this.options.setting.cacheFolder}${data['z']}/${data['x']}/${data['y']}.png`
+		const path = `${this.options.cacheFolder}${this.options.name}/${data['z']}/${data['x']}/${data['y']}.png`
 
 		if (this._map && !this._map.options.crs.infinite) {
 			var invertedY = this._globalTileRange.max.y - coords.y;
