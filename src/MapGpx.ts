@@ -1,20 +1,20 @@
-import {MapSettings} from "./settings";
-import {TrackProperty} from "./trackproperty";
+import {MapGpxSettings} from "./MapGpxSettings";
+import {MapGpxTrackProperty} from "./MapGpxTrackProperty";
+import {StorageTileLayer} from "./MapGpxStorageLayer";
 
 // @ts-ignore
 import L from 'leaflet'
-// @ts-ignore
-require('../map/gpx');
+require('./gpx');
 
 export class MapGpx {
 
-	private setting: MapSettings;
-	private el: HTMLElement;
+	private setting: MapGpxSettings
+	private el: HTMLElement
 
-	constructor(el: HTMLElement, setting: MapSettings)
+	constructor(el: HTMLElement, setting: MapGpxSettings)
 	{
-		this.el = el;
-		this.setting = setting;
+		this.el = el
+		this.setting = setting
 	}
 
 	private createBox(): HTMLDivElement
@@ -32,8 +32,12 @@ export class MapGpx {
 			zoomControl: this.setting.zoomControl,
 			attributionControl: false
 		});
-		//L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+		if (this.setting.cache) {
+			new StorageTileLayer(this.setting.service, {setting: this.setting}).addTo(map);
+		} else {
+			L.tileLayer(this.setting.service).addTo(map)
+		}
 
 		return map;
 	}
@@ -57,9 +61,9 @@ export class MapGpx {
 				startIconUrl : this.setting.startIconUrl,
 				endIconUrl: this.setting.endIconUrl,
 				shadowUrl: this.setting.shadowUrl,
-				iconSize: this.setting.iconSize,
+				//iconSize: this.setting.iconSize,
 				wptIconUrls: {'' : this.setting.wptIconUrl},
-				pointMatchers: this.setting.pointMatchers
+				//pointMatchers: this.setting.pointMatchers
 			},
 			polyline_options: {
 				color: this.setting.color,
@@ -70,7 +74,7 @@ export class MapGpx {
 
 		}).on('loaded', function (e: L.GPX) {
 			map.fitBounds(e.target.getBounds());
-			const prop = new TrackProperty(e.target);
+			const prop = new MapGpxTrackProperty(e.target);
 
 			el?.setText( prop.distance().toString() );
 		}).addTo(map);

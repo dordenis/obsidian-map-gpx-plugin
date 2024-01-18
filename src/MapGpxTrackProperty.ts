@@ -1,5 +1,5 @@
 
-export class TrackProperty {
+export class MapGpxTrackProperty {
 
 	private property: object;
 

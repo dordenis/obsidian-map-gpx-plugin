@@ -5,7 +5,7 @@
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"build": "node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
@@ -22,8 +22,11 @@
 		"typescript": "4.7.4"
 	},
 	"dependencies": {
+		"@yaga/leaflet-cached-tile-layer": "^1.0.0",
+		"axios": "^1.6.5",
 		"leaflet": "^1.9.4",
 		"leaflet-defaulticon-compatibility": "^0.1.2",
-		"leaflet-gpx": "^1.7.0"
+		"leaflet-gpx": "^1.7.0",
+		"request": "^2.88.2"
 	}
 }
