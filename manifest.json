@@ -1,7 +1,7 @@
 {
 	"id": "map-gpx",
 	"name": "Map Gpx",
-	"version": "3.0.1",
+	"version": "3.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Visualizing gpx tracks",
 	"author": "Denis Doroshenko",
