@@ -23,11 +23,10 @@ export default class MapGpxPlugin extends Plugin {
 		this.addSettingTab(new Tab(this.app, this))
 
 		this.registerMarkdownCodeBlockProcessor("map",   async (source, el, ctx) => {
-			await this.loadMdSettings(source);
+			const settings = await this.loadMdSettings(source);
+			const map = new MapGpx(el, settings);
 
-			const map = new MapGpx(el, this.settings);
-
-			let path = normalizePath(this.settings.track);
+			let path = normalizePath(settings.track);
 			const files = this.app.vault.getFiles().filter(f => (f.name === path))
 			path = files[0] ? files[0].path : path;
 			const file = this.app.vault.getAbstractFileByPath(path);
@@ -39,9 +38,9 @@ export default class MapGpxPlugin extends Plugin {
 		});
 
 		this.registerMarkdownCodeBlockProcessor("maplist",   async (source, el, ctx) => {
-			await this.loadMdSettings(source);
+			const settings = await this.loadMdSettings(source);
 
-			const path = normalizePath(this.settings.trackFolder);
+			const path = normalizePath(settings.trackFolder);
 			const folder = this.app.vault.getAbstractFileByPath(path);
 
 			if (folder instanceof TFolder) {
@@ -57,7 +56,7 @@ export default class MapGpxPlugin extends Plugin {
 				Vault.recurseChildren(folder, async (file) => {
 					if (file instanceof TFile) {
 						let tr = body.createEl("tr");
-						let map = new MapGpx(tr.createEl("td"), this.settings);
+						let map = new MapGpx(tr.createEl("td"), settings);
 						tr.createEl("td", {text: file.name});
 						const xml = await this.app.vault.read(file);
 						map.renderTrack(xml, tr.createEl("td"));
@@ -70,11 +69,11 @@ export default class MapGpxPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+		this.settings.cacheFolder = this.getCacheFolder()
 	}
 
 	async loadMdSettings(source: string) {
-		this.settings = Object.assign({}, this.settings,  await parseYaml(source))
-		this.settings.cacheFolder = this.getCacheFolder()
+		return  Object.assign({}, this.settings,  await parseYaml(source))
 	}
 
 	async saveSettings() {
