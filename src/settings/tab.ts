@@ -1,7 +1,8 @@
-import {App, FileSystemAdapter, PluginSettingTab, Setting} from "obsidian";
-import MapGpxPlugin from "./MapGpxPlugin";
+import {App, FileSystemAdapter, PluginSettingTab, setIcon, Setting} from "obsidian";
+import MapGpxPlugin from "../MapGpxPlugin";
 
-export class MapGpxTab extends PluginSettingTab {
+
+export class Tab extends PluginSettingTab {
 	plugin: MapGpxPlugin;
 
 	constructor(app: App, plugin: MapGpxPlugin) {
@@ -14,7 +15,7 @@ export class MapGpxTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Settings GPX" });
+		containerEl.createEl("h2", { text: "Settings cache" });
 
 		new Setting(containerEl)
 			.setName("Use cache")
@@ -43,6 +44,8 @@ export class MapGpxTab extends PluginSettingTab {
 				);
 		}
 
+		containerEl.createEl("h2", { text: "Settings box" });
+
 		new Setting(containerEl)
 			.setName("Zoom control")
 			.addToggle(toggle =>
@@ -52,16 +55,6 @@ export class MapGpxTab extends PluginSettingTab {
 						this.plugin.settings.zoomControl = value;
 						await this.plugin.saveSettings();
 					})
-			);
-
-		new Setting(containerEl)
-			.setName("Tiles service url")
-			.addTextArea(text => text
-				.setValue(this.plugin.settings.service)
-				.onChange(async (value) => {
-					this.plugin.settings.service = value;
-					await this.plugin.saveSettings();
-				})
 			);
 
 		new Setting(containerEl)
@@ -94,6 +87,49 @@ export class MapGpxTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				})
 			);
+
+		containerEl.createEl("h2", { text: "Settings tiles providers" });
+
+		const defaultProviderOptions: Record<string, string> = {}
+		Object.keys(this.plugin.settings.providers).forEach(key => {
+			defaultProviderOptions[key] = key
+		});
+
+		new Setting(containerEl)
+			.setName("Default tiles provider")
+			.addDropdown(dropdown => dropdown
+				.addOptions(defaultProviderOptions)
+				.setValue(this.plugin.settings.defaultProvider)
+				.onChange(async (value) =>	{
+					this.plugin.settings.defaultProvider = value
+					await this.plugin.saveSettings()
+				})
+			);
+
+		Object.entries(this.plugin.settings.providers).forEach(([key, provider]) => {
+
+			const providers = new Setting(containerEl).setName(key)
+
+			if (provider.variants) {
+				providers.addDropdown(dropdown => dropdown
+					.addOptions(provider.variants)
+					.setValue(provider.options.variant)
+					.onChange(async (value) => {
+						provider.options.variant = value
+						await this.plugin.saveSettings()
+					})
+				)
+			}
+			providers.addToggle(toggle => toggle
+				.setValue(provider.enable)
+				.onChange(async (value) => {
+					provider.enable = value;
+					await this.plugin.saveSettings();
+				})
+			)
+		})
+
+		containerEl.createEl("h2", { text: "Settings icons" });
 
 		new Setting(containerEl)
 			.setName("Use custom icons")

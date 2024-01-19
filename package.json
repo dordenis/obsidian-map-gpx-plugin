@@ -22,12 +22,10 @@
 		"typescript": "4.7.4"
 	},
 	"dependencies": {
-		"@yaga/leaflet-cached-tile-layer": "^1.0.0",
 		"axios": "^1.6.5",
 		"leaflet": "^1.9.4",
 		"leaflet-defaulticon-compatibility": "^0.1.2",
 		"leaflet-gpx": "^1.7.0",
-		"leaflet-providers": "^2.0.0",
 		"request": "^2.88.2"
 	}
 }

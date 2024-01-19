@@ -1,29 +1,26 @@
 import {
-	Events,
 	FileSystemAdapter,
-	MarkdownView,
 	normalizePath,
-	parseYaml,
-	Plugin,
+	parseYaml, Plugin,
 	TFile,
 	TFolder,
 	Vault
 } from "obsidian";
-import {DEFAULT_SETTINGS, MapGpxSettings} from "./MapGpxSettings";
-import {MapGpxTab} from "./MapGpxTab";
+import {DEFAULT_SETTINGS, Settings} from "./settings/settings";
+import {Tab} from "./settings/tab";
 import {MapGpx} from "./MapGpx";
 
 
 export default class MapGpxPlugin extends Plugin {
 
-	settings: MapGpxSettings;
+	settings: Settings;
 
 	async onload() {
 		console.log("Load GPX plugin")
 
 		await this.loadSettings()
 
-		this.addSettingTab(new MapGpxTab(this.app, this))
+		this.addSettingTab(new Tab(this.app, this))
 
 		this.registerMarkdownCodeBlockProcessor("map",   async (source, el, ctx) => {
 			await this.loadMdSettings(source);
