@@ -8,6 +8,7 @@ import axios from "axios";
 import {template} from "leaflet/src/core/Util";
 // @ts-ignore
 import {Browser, extend} from "leaflet/dist/leaflet-src.esm";
+import {requestUrl} from "obsidian";
 
 export const StorageTileLayer = L.TileLayer.extend({
 
@@ -43,20 +44,20 @@ export const StorageTileLayer = L.TileLayer.extend({
 		return url
 	},
 
-	download(url: string, outputPath: string) {
+	async download(url: string, outputPath: string) {
 		axios.get(url, {
 			responseType: 'arraybuffer'
 		})
-			.then(function (response) {
-				const dirname = path.dirname(outputPath);
-				fs.mkdirSync(dirname, {recursive: true})
-				fs.promises.writeFile(outputPath, Buffer.from(response.data, 'binary'))
+		.then(function (response) {
+			const dirname = path.dirname(outputPath);
+			fs.mkdirSync(dirname, {recursive: true})
+			fs.promises.writeFile(outputPath, Buffer.from(response.data, 'binary'))
 
-				//console.log("download");
-			})
-			.catch(function (error) {
-				console.log("GpxMap Download tile", error);
-			})
+			//console.log("download");
+		})
+		.catch(function (error) {
+			console.log("GpxMap Download tile", error);
+		})
 	},
 
 })
