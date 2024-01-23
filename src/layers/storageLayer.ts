@@ -22,7 +22,7 @@ export const StorageTileLayer = L.TileLayer.extend({
 		};
 
 		const variant = this.options.variant ? `/${this.options.variant}/` : "/"
-		const path = `${this.options.cacheFolder}${this.options.name}${variant}${data['z']}/${data['x']}/${data['y']}.png`
+		const path = `${this.options.cacheFolder}${this.options.name}${variant}${data['z']}/${data['x']}/${data['y']}.${this.options.ext ?? "png"}`
 
 		if (this._map && !this._map.options.crs.infinite) {
 			var invertedY = this._globalTileRange.max.y - coords.y;

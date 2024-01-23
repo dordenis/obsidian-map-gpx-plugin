@@ -5,6 +5,7 @@ export interface ProviderOptions {
 		attribution?: string
 		subdomains?: string
 		variant?: string
+		ext?: string
 	}
 	variants?: Record<string, string>
 	enable: boolean
@@ -17,8 +18,7 @@ export const  DEFAULT_PROVIDER: Provider = {
 		url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 		options: {
 			maxZoom: 19,
-			attribution:
-				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		},
 		enable: true
 	},
