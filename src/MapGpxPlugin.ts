@@ -23,6 +23,7 @@ export default class MapGpxPlugin extends Plugin {
 		this.addSettingTab(new Tab(this.app, this))
 
 		this.registerMarkdownCodeBlockProcessor("map",   async (source, el, ctx) => {
+
 			const settings = await this.loadMdSettings(source);
 			const map = new MapGpx(el, settings);
 
@@ -64,7 +65,6 @@ export default class MapGpxPlugin extends Plugin {
 				});
 			}
 		})
-
 	}
 
 	async loadSettings() {
@@ -78,6 +78,11 @@ export default class MapGpxPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+		app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.getViewState().type == "markdown") {
+				leaf.rebuildView()
+			}
+		})
 	}
 
 	onunload() {
